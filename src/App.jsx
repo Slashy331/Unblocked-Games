@@ -39,10 +39,43 @@ export default function App() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") setSelectedGame(null);
+      // Panic Key: P
+      if (e.key.toLowerCase() === "p") {
+        window.location.href = "https://classroom.google.com";
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  const launchStealthMode = (game) => {
+    const win = window.open();
+    if (!win) {
+      alert("Please allow popups for stealth mode to work!");
+      return;
+    }
+    win.document.title = "Google";
+    const iframe = win.document.createElement("iframe");
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.style.border = "none";
+    iframe.style.position = "fixed";
+    iframe.style.inset = "0";
+    iframe.src = game.url;
+    win.document.body.appendChild(iframe);
+    win.document.body.style.margin = "0";
+    win.document.body.style.padding = "0";
+    win.document.body.style.overflow = "hidden";
+  };
+
+  const cloakTab = () => {
+    document.title = "Google";
+    const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = 'https://www.google.com/favicon.ico';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  };
 
   const getCategoryIcon = (category) => {
     switch (category) {
@@ -133,6 +166,18 @@ export default function App() {
           </div>
           
           <div className="flex items-center gap-4 ml-6">
+            <button 
+              onClick={cloakTab}
+              className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl bg-gaming-card border border-gaming-border text-xs font-bold hover:bg-gaming-border transition-all"
+            >
+              CLOAK TAB
+            </button>
+            <button 
+              onClick={() => window.location.href = "https://classroom.google.com"}
+              className="px-3 py-2 rounded-xl bg-gaming-accent/10 border border-gaming-accent/30 text-gaming-accent text-xs font-bold hover:bg-gaming-accent hover:text-white transition-all animate-pulse"
+            >
+              PANIC [P]
+            </button>
             <button className="md:hidden p-2 rounded-lg bg-gaming-card border border-gaming-border">
               <Menu className="w-6 h-6" />
             </button>
@@ -223,10 +268,11 @@ export default function App() {
               
               <div className="flex items-center gap-3">
                 <button 
-                  onClick={() => window.open(selectedGame.url, "_blank")}
-                  className="p-3 rounded-xl bg-gaming-card border border-gaming-border hover:bg-gaming-border transition-colors"
+                  onClick={() => launchStealthMode(selectedGame)}
+                  className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gaming-primary/10 border border-gaming-primary/30 text-gaming-primary hover:bg-gaming-primary hover:text-white transition-all font-bold text-sm"
                 >
                   <Maximize2 className="w-5 h-5" />
+                  STEALTH MODE
                 </button>
                 <button 
                   onClick={() => setSelectedGame(null)}
