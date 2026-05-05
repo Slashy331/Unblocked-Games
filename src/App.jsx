@@ -21,6 +21,7 @@ import {
 import { GAMES } from "./data/games.js";
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [hasStarted, setHasStarted] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,6 +48,8 @@ export default function App() {
   }, [searchQuery, activeCategory]);
 
   useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    
     const handleKeyDown = (e) => {
       if (e.key === "Escape") setSelectedGame(null);
       // Panic Key: P
@@ -55,7 +58,11 @@ export default function App() {
       }
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   const launchStealthMode = (game) => {
@@ -111,44 +118,85 @@ export default function App() {
     }
   };
 
-  if (!hasStarted) {
+  if (isLoading || !hasStarted) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-6 font-sans">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-lg w-full bg-white border border-slate-200 rounded-3xl p-10 shadow-2xl shadow-slate-200/50 text-center space-y-8"
-        >
-          <div className="w-20 h-20 bg-gaming-primary rounded-2xl mx-auto flex items-center justify-center text-white shadow-xl shadow-gaming-primary/20">
-            <Calculator size={40} />
-          </div>
-          
-          <div className="space-y-4">
-            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Academic Access Portal</h1>
-            <p className="text-slate-500 leading-relaxed">
-              Welcome to the secondary educational resource database. Please confirm your credentials to initialize the computational environment.
-            </p>
-          </div>
+      <div className="min-h-screen bg-[#fafbfc] flex items-center justify-center p-6 font-sans">
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <motion.div 
+              key="loader"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center gap-6"
+            >
+              <div className="relative">
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="w-16 h-16 border-4 border-slate-100 border-t-gaming-primary rounded-full"
+                />
+                <Calculator size={24} className="absolute inset-0 m-auto text-gaming-primary" />
+              </div>
+              <div className="text-center space-y-2">
+                <h2 className="text-sm font-bold text-slate-800 uppercase tracking-[0.2em]">CALCSYNC OS</h2>
+                <p className="text-[10px] text-slate-400 font-medium">Initializing secure environment...</p>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="portal"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="max-w-xl w-full bg-white border border-slate-200 rounded-[2.5rem] p-12 shadow-2xl shadow-slate-200/50 text-center space-y-10"
+            >
+              <div className="w-24 h-24 bg-gaming-primary rounded-3xl mx-auto flex items-center justify-center text-white shadow-2xl shadow-gaming-primary/30 transform -rotate-3 transition-transform hover:rotate-0">
+                <BookOpen size={48} />
+              </div>
+              
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-50 border border-slate-100">
+                  <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase">Institutional Network Active</span>
+                </div>
+                <div className="space-y-3">
+                  <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    Academic Access <br/>
+                    <span className="text-gaming-primary">Research Portal</span>
+                  </h1>
+                  <p className="text-slate-500 leading-relaxed max-w-sm mx-auto text-lg font-light">
+                    Secure gateway for mathematical simulations and high-performance computational theory.
+                  </p>
+                </div>
+              </div>
 
-          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 text-left space-y-3">
-            <div className="flex items-center gap-3 text-xs font-bold text-slate-400 uppercase tracking-widest">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              Network Status: Secured
-            </div>
-            <div className="text-sm text-slate-600 font-medium">Session ID: <span className="font-mono">MATH-8829-X</span></div>
-          </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 text-left">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Protocol</p>
+                  <p className="text-sm text-slate-700 font-mono">HS-0922-A1</p>
+                </div>
+                <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 text-left">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Session</p>
+                  <p className="text-sm text-slate-700 font-mono">ENCRYPTED</p>
+                </div>
+              </div>
 
-          <button 
-            onClick={() => setHasStarted(true)}
-            className="w-full bg-gaming-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-gaming-primary/90 transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-gaming-primary/30"
-          >
-            START RESEARCH SESSION
-          </button>
-          
-          <p className="text-xs text-slate-400">
-            Authorized Personnel Only. Terms and Conditions Apply.
-          </p>
-        </motion.div>
+              <div className="space-y-4 pt-4">
+                <button 
+                  onClick={() => setHasStarted(true)}
+                  className="w-full bg-gaming-primary text-white py-5 rounded-2xl font-bold text-xl hover:bg-slate-900 transition-all transform hover:scale-[1.02] active:scale-95 shadow-xl shadow-gaming-primary/20"
+                >
+                  INITIALIZE LAB SESSION
+                </button>
+                <div className="flex items-center justify-center gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">
+                  <span>Terms of Service</span>
+                  <div className="w-1 h-1 rounded-full bg-slate-200" />
+                  <span>Privacy Policy</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
