@@ -3,28 +3,28 @@
   --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   
-  --color-gaming-primary: #3b82f6;
-  --color-gaming-secondary: #06b6d4;
-  --color-gaming-accent: #f43f5e;
-  --color-gaming-bg: #030712;
-  --color-gaming-card: #111827;
-  --color-gaming-border: #1f2937;
+  --color-gaming-primary: #1e40af;
+  --color-gaming-secondary: #3b82f6;
+  --color-gaming-accent: #dc2626;
+  --color-gaming-bg: #f8fafc;
+  --color-gaming-card: #ffffff;
+  --color-gaming-border: #e2e8f0;
 }
 
 @import "tailwindcss";
 
 @layer base {
   body {
-    @apply bg-gaming-bg text-gray-100 font-sans antialiased;
+    @apply bg-gaming-bg text-slate-800 font-sans antialiased;
   }
 }
 
 @layer utilities {
   .glass-card {
-    @apply bg-gaming-card border border-gaming-border rounded-xl backdrop-blur-md;
+    @apply bg-gaming-card border border-gaming-border rounded-xl shadow-sm;
   }
   
   .neon-glow {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 }
