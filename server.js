@@ -19,8 +19,13 @@ async function startServer() {
     });
     app.use(vite.middlewares);
 
-    app.get('*', async (req, res, next) => {
+    app.use('*', async (req, res, next) => {
       const url = req.originalUrl;
+      // Only serve index.html for requests that look like page navigations
+      if (req.method !== 'GET' || req.headers.accept?.includes('application/json') || url.includes('.')) {
+        return next();
+      }
+
       try {
         let template = await fs.readFile(path.resolve(__dirname, 'index.html'), 'utf-8');
         template = await vite.transformIndexHtml(url, template);
