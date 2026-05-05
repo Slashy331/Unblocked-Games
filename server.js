@@ -11,6 +11,10 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', environment: process.env.NODE_ENV || 'development' });
+  });
+
   // Use Vite's connect instance as middleware in development mode
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
@@ -19,17 +23,23 @@ async function startServer() {
     });
     app.use(vite.middlewares);
 
-    app.use('*', async (req, res, next) => {
-      const url = req.originalUrl;
-      
-      // Skip for files with extensions that should be handled by vite.middlewares
-      if (url.includes('.') && !url.endsWith('.html')) {
-        return next();
-      }
-
+    app.get('/', async (req, res, next) => {
       try {
         let template = await fs.readFile(path.resolve(__dirname, 'index.html'), 'utf-8');
-        template = await vite.transformIndexHtml(url, template);
+        template = await vite.transformIndexHtml(req.originalUrl, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+      } catch (e) {
+        vite.ssrFixStacktrace(e);
+        next(e);
+      }
+    });
+
+    // Handle any other route by serving index.html (SPA fallback)
+    app.use('*', async (req, res, next) => {
+      if (req.originalUrl.includes('.')) return next();
+      try {
+        let template = await fs.readFile(path.resolve(__dirname, 'index.html'), 'utf-8');
+        template = await vite.transformIndexHtml(req.originalUrl, template);
         res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
       } catch (e) {
         vite.ssrFixStacktrace(e);
