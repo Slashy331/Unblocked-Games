@@ -21,6 +21,7 @@ import {
 import { GAMES } from "./data/games.js";
 
 export default function App() {
+  const [hasStarted, setHasStarted] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All Units");
@@ -109,6 +110,48 @@ export default function App() {
       default: return <BookOpen className="w-4 h-4" />;
     }
   };
+
+  if (!hasStarted) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center p-6 font-sans">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-lg w-full bg-white border border-slate-200 rounded-3xl p-10 shadow-2xl shadow-slate-200/50 text-center space-y-8"
+        >
+          <div className="w-20 h-20 bg-gaming-primary rounded-2xl mx-auto flex items-center justify-center text-white shadow-xl shadow-gaming-primary/20">
+            <Calculator size={40} />
+          </div>
+          
+          <div className="space-y-4">
+            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Academic Access Portal</h1>
+            <p className="text-slate-500 leading-relaxed">
+              Welcome to the secondary educational resource database. Please confirm your credentials to initialize the computational environment.
+            </p>
+          </div>
+
+          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 text-left space-y-3">
+            <div className="flex items-center gap-3 text-xs font-bold text-slate-400 uppercase tracking-widest">
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+              Network Status: Secured
+            </div>
+            <div className="text-sm text-slate-600 font-medium">Session ID: <span className="font-mono">MATH-8829-X</span></div>
+          </div>
+
+          <button 
+            onClick={() => setHasStarted(true)}
+            className="w-full bg-gaming-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-gaming-primary/90 transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-gaming-primary/30"
+          >
+            START RESEARCH SESSION
+          </button>
+          
+          <p className="text-xs text-slate-400">
+            Authorized Personnel Only. Terms and Conditions Apply.
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex text-slate-800 font-sans">

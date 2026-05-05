@@ -15,37 +15,13 @@ async function startServer() {
     res.json({ status: 'ok', environment: process.env.NODE_ENV || 'development' });
   });
 
-  // Use Vite's connect instance as middleware in development mode
+  // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
-      appType: 'custom',
+      appType: 'spa',
     });
     app.use(vite.middlewares);
-
-    app.get('/', async (req, res, next) => {
-      try {
-        let template = await fs.readFile(path.resolve(__dirname, 'index.html'), 'utf-8');
-        template = await vite.transformIndexHtml(req.originalUrl, template);
-        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
-      } catch (e) {
-        vite.ssrFixStacktrace(e);
-        next(e);
-      }
-    });
-
-    // Handle any other route by serving index.html (SPA fallback)
-    app.use('*', async (req, res, next) => {
-      if (req.originalUrl.includes('.')) return next();
-      try {
-        let template = await fs.readFile(path.resolve(__dirname, 'index.html'), 'utf-8');
-        template = await vite.transformIndexHtml(req.originalUrl, template);
-        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
-      } catch (e) {
-        vite.ssrFixStacktrace(e);
-        next(e);
-      }
-    });
   } else {
     // Serve static files in production
     const distPath = path.join(process.cwd(), 'dist');
