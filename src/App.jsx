@@ -18,7 +18,7 @@ import {
   Trophy,
   Car
 } from "lucide-react";
-import { GAMES } from "./data/games";
+import { GAMES } from "./data/games.js";
 
 export default function App() {
   const [selectedGame, setSelectedGame] = useState(null);

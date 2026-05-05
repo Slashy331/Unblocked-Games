@@ -18,23 +18,6 @@ async function startServer() {
       appType: 'spa',
     });
     app.use(vite.middlewares);
-
-    app.use('*', async (req, res, next) => {
-      const url = req.originalUrl;
-      // Only serve index.html for requests that look like page navigations
-      if (req.method !== 'GET' || req.headers.accept?.includes('application/json') || url.includes('.')) {
-        return next();
-      }
-
-      try {
-        let template = await fs.readFile(path.resolve(__dirname, 'index.html'), 'utf-8');
-        template = await vite.transformIndexHtml(url, template);
-        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
-      } catch (e) {
-        vite.ssrFixStacktrace(e);
-        next(e);
-      }
-    });
   } else {
     // Serve static files in production
     const distPath = path.join(process.cwd(), 'dist');
