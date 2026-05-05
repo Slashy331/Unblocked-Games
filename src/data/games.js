@@ -1,0 +1,58 @@
+export const GAMES = [
+  {
+    id: "slope",
+    title: "Slope",
+    description: "Navigate a ball down a steep, obstacle-filled slope in this fast-paced neon runner.",
+    category: "Action",
+    url: "https://slopegame.io/",
+    thumbnail: "https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=400&q=80",
+  },
+  {
+    id: "2048",
+    title: "2048",
+    description: "Slide tiles on a grid to combine them and create the 2048 tile.",
+    category: "Puzzle",
+    url: "https://play2048.co/",
+    thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&q=80",
+  },
+  {
+    id: "tanuki-sunset",
+    title: "Tanuki Sunset",
+    description: "Longboard down a scenic mountain as a trash-collecting raccoon at sunset.",
+    category: "Driving",
+    url: "https://tanukisunset.com/",
+    thumbnail: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80",
+  },
+  {
+    id: "cookie-clicker",
+    title: "Cookie Clicker",
+    description: "The classic idle game where you click a giant cookie to bake as many cookies as possible.",
+    category: "Casual",
+    url: "https://orteil.dashnet.org/cookieclicker/",
+    thumbnail: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=80",
+  },
+  {
+    id: "retro-bowl",
+    title: "Retro Bowl",
+    description: "A fun and addictive American football management game with retro graphics.",
+    category: "Sports",
+    url: "https://retrobowl.me/",
+    thumbnail: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=400&q=80",
+  },
+  {
+    id: "subway-surfers",
+    title: "Subway Surfers",
+    description: "Run, jump, and dodge obstacles in this world-famous endless runner game.",
+    category: "Action",
+    url: "https://subwaysurfers.com/",
+    thumbnail: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&q=80",
+  },
+  {
+    id: "basket-random",
+    title: "Basket Random",
+    description: "Two-player physics-based basketball with random physics, courts, and players.",
+    category: "Sports",
+    url: "https://www.basketrandom.com/",
+    thumbnail: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400&q=80",
+  }
+];

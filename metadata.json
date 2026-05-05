@@ -1,0 +1,10 @@
+{
+  "name": "Nexus Games Hub",
+  "description": "A high-performance unblocked games portal with a wide selection of web-based games, featuring a clean dark-mode interface and instant search.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
